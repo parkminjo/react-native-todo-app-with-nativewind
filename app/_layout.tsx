@@ -4,6 +4,8 @@ const Layout = () => {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="+not-found" />
+      <Stack.Screen name="+html" />
       <Stack.Screen
         name="modal"
         options={{

@@ -4,8 +4,8 @@ import { Todos } from '@/types';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Checkbox } from 'expo-checkbox';
-import { Link } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { Link, useFocusEffect } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import './global.css';
 
@@ -63,9 +63,9 @@ const App = () => {
   const loadTodosFromStorage = async () => {
     try {
       const response = await AsyncStorage.getItem(STORAGES.TODOS);
-      if (!response) throw new Error('no todos');
+      if (!response) return;
 
-      const data = JSON.parse(response);
+      const data: Todos = JSON.parse(response);
 
       setTodos(data);
     } catch (error) {
@@ -81,7 +81,7 @@ const App = () => {
   const loadSelectedTabFromStorage = async () => {
     try {
       const data = await AsyncStorage.getItem(STORAGES.TAB);
-      if (!data) throw new Error('no tab');
+      if (!data) return;
 
       setIsWorking(data === TABS.WORK);
     } catch (error) {
@@ -109,6 +109,12 @@ const App = () => {
     loadTodosFromStorage();
     loadSelectedTabFromStorage();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadTodosFromStorage();
+    }, [])
+  );
 
   return (
     <View className="flex-1 gap-4 bg-black px-5 py-20">
@@ -145,7 +151,7 @@ const App = () => {
             isWorking === todos[key].isWorking ? (
               <View
                 key={key}
-                className="flex-row items-center justify-between rounded-lg bg-gray-800 px-4 py-3">
+                className="flex-row items-center justify-between rounded-lg bg-gray-800 px-4 py-4">
                 <View className="flex-row items-center gap-3">
                   <Checkbox
                     value={todos[key].isCompleted}
@@ -154,7 +160,7 @@ const App = () => {
                   <Text className="font-medium text-white">{todos[key].content}</Text>
                 </View>
                 <View className="flex-row items-center gap-3">
-                  <Link href="/modal">
+                  <Link href={`/modal?id=${key}`}>
                     <FontAwesome name="pencil" size={18} color="gray" />
                   </Link>
                   <TouchableOpacity onPress={() => onPressDeleteButton(key)}>
