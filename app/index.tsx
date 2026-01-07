@@ -1,8 +1,10 @@
 import { STORAGES } from '@/constants/storage';
+import { TABS } from '@/constants/tab';
 import { Todos } from '@/types';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Checkbox } from 'expo-checkbox';
+import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import './global.css';
@@ -12,8 +14,9 @@ const App = () => {
   const [isWorking, setIsWorking] = useState(true);
   const [todos, setTodos] = useState<Todos>({});
 
-  const onPressTab = () => {
-    setIsWorking((prev) => !prev);
+  const onPressTab = (isWorking: boolean) => {
+    setIsWorking(isWorking);
+    saveSelectedTab(isWorking);
   };
 
   const onChangeInputValue = (text: string) => {
@@ -55,16 +58,33 @@ const App = () => {
     await AsyncStorage.setItem(STORAGES.TODOS, JSON.stringify(todos));
   };
 
-  const loadTodosAtStorage = async () => {
+  const loadTodosFromStorage = async () => {
     try {
       const response = await AsyncStorage.getItem(STORAGES.TODOS);
       if (!response) throw new Error('no todos');
 
       const data = JSON.parse(response);
+      console.log('todos', data);
 
       setTodos(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
+    }
+  };
+
+  const saveSelectedTab = async (isWorking: boolean) => {
+    const tabName = isWorking ? TABS.WORK : TABS.TRAVEL;
+    await AsyncStorage.setItem(STORAGES.TAB, tabName);
+  };
+
+  const loadSelectedTabFromStorage = async () => {
+    try {
+      const data = await AsyncStorage.getItem(STORAGES.TAB);
+      if (!data) throw new Error('no tab');
+
+      setIsWorking(data === TABS.WORK);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -85,19 +105,20 @@ const App = () => {
   };
 
   useEffect(() => {
-    loadTodosAtStorage();
+    loadTodosFromStorage();
+    loadSelectedTabFromStorage();
   }, []);
 
   return (
     <View className="flex-1 gap-4 bg-black px-5 py-20">
       <StatusBar />
       <View className="flex-row items-center justify-between">
-        <TouchableOpacity onPress={onPressTab}>
+        <TouchableOpacity onPress={() => onPressTab(true)}>
           <Text className={`text-3xl font-semibold ${isWorking ? 'text-white' : 'text-gray-500'}`}>
             Work
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onPressTab}>
+        <TouchableOpacity onPress={() => onPressTab(false)}>
           <Text className={`text-3xl font-semibold ${isWorking ? 'text-gray-700' : 'text-white'}`}>
             Travel
           </Text>
@@ -130,10 +151,10 @@ const App = () => {
                 />
                 <Text className="font-medium text-white">{todos[key].content}</Text>
               </View>
-              <View className="flex-row items-center gap-2">
-                <TouchableOpacity>
+              <View className="flex-row items-center gap-3">
+                <Link href="/modal">
                   <FontAwesome name="pencil" size={18} color="gray" />
-                </TouchableOpacity>
+                </Link>
                 <TouchableOpacity onPress={() => onPressDeleteButton(key)}>
                   <FontAwesome name="trash-o" size={18} color="gray" />
                 </TouchableOpacity>
