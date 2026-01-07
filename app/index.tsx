@@ -4,7 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Checkbox } from 'expo-checkbox';
 import { useEffect, useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import './global.css';
 
 const App = () => {
@@ -44,10 +44,11 @@ const App = () => {
   };
 
   const updatedTodoCompletion = (key: string, todos: Todos) => {
-    const newTodo = { ...todos };
-    newTodo[key].isCompleted = !newTodo[key].isCompleted;
+    const newTodos = { ...todos };
+    newTodos[key].isCompleted = !newTodos[key].isCompleted;
 
-    setTodos(newTodo);
+    setTodos(newTodos);
+    saveTodos(newTodos);
   };
 
   const saveTodos = async (todos: Todos) => {
@@ -88,7 +89,8 @@ const App = () => {
   }, []);
 
   return (
-    <View className="flex-1 gap-4 bg-black p-5">
+    <View className="flex-1 gap-4 bg-black px-5 py-20">
+      <StatusBar />
       <View className="flex-row items-center justify-between">
         <TouchableOpacity onPress={onPressTab}>
           <Text className={`text-3xl font-semibold ${isWorking ? 'text-white' : 'text-gray-500'}`}>
