@@ -1,14 +1,16 @@
-import { Todo } from '@/types';
+import { STORAGES } from '@/constants/storage';
+import { Todos } from '@/types';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Checkbox } from 'expo-checkbox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import './global.css';
 
 const App = () => {
   const [inputValue, setInputValue] = useState('');
   const [isWorking, setIsWorking] = useState(true);
-  const [todos, setTodos] = useState<Record<string, Todo>>({});
+  const [todos, setTodos] = useState<Todos>({});
 
   const onPressTab = () => {
     setIsWorking((prev) => !prev);
@@ -25,22 +27,44 @@ const App = () => {
       isCompleted: false,
     };
 
-    setTodos((prev) => ({ ...prev, [Date.now()]: newTodo }));
+    const newTodos = { ...todos, [Date.now()]: newTodo };
+
+    setTodos(newTodos);
+    saveTodos(newTodos);
+
     setInputValue('');
   };
 
   const deleteTodo = (key: string) => {
-    const newTodo = { ...todos };
-    delete newTodo[key];
+    const newTodos = { ...todos };
+    delete newTodos[key];
 
-    setTodos(newTodo);
+    setTodos(newTodos);
+    saveTodos(newTodos);
   };
 
-  const updatedTodoCompletion = (key: string, todos: Record<string, Todo>) => {
+  const updatedTodoCompletion = (key: string, todos: Todos) => {
     const newTodo = { ...todos };
     newTodo[key].isCompleted = !newTodo[key].isCompleted;
 
     setTodos(newTodo);
+  };
+
+  const saveTodos = async (todos: Todos) => {
+    await AsyncStorage.setItem(STORAGES.TODOS, JSON.stringify(todos));
+  };
+
+  const loadTodosAtStorage = async () => {
+    try {
+      const response = await AsyncStorage.getItem(STORAGES.TODOS);
+      if (!response) throw new Error('no todos');
+
+      const data = JSON.parse(response);
+
+      setTodos(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const onSubmitTodo = () => {
@@ -55,9 +79,13 @@ const App = () => {
     deleteTodo(key);
   };
 
-  const onPressCheckBox = (key: string, todos: Record<string, Todo>) => {
+  const onPressCheckBox = (key: string, todos: Todos) => {
     updatedTodoCompletion(key, todos);
   };
+
+  useEffect(() => {
+    loadTodosAtStorage();
+  }, []);
 
   return (
     <View className="flex-1 gap-4 bg-black p-5">
