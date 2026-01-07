@@ -24,6 +24,8 @@ const App = () => {
   };
 
   const addTodo = (text: string, isWorking: boolean) => {
+    if (text.trim() === '') return;
+
     const newTodo = {
       content: text,
       isWorking,
