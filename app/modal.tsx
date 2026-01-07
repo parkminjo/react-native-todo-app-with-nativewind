@@ -41,10 +41,6 @@ const Modal = () => {
     setInputValue(text);
   };
 
-  const onPressEditButton = () => {
-    updateTodo();
-  };
-
   useEffect(() => {
     loadTodo();
   }, [id]);
@@ -57,8 +53,9 @@ const Modal = () => {
           className="rounded-lg border border-gray-500 bg-white px-4 py-3"
           value={inputValue}
           onChangeText={onChangeInputValue}
+          onSubmitEditing={updateTodo}
         />
-        <TouchableOpacity className="rounded-lg bg-blue-500 px-4 py-3" onPress={onPressEditButton}>
+        <TouchableOpacity className="rounded-lg bg-blue-500 px-4 py-3" onPress={updateTodo}>
           <Text className="text-center font-semibold text-white">Edit</Text>
         </TouchableOpacity>
       </View>
