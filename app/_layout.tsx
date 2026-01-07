@@ -5,11 +5,13 @@ const Layout = () => {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
-      <Stack.Screen name="+html" />
       <Stack.Screen
         name="modal"
         options={{
+          title: 'Edit',
           presentation: 'modal',
+          headerStyle: { backgroundColor: 'black' },
+          headerTintColor: 'white',
         }}
       />
     </Stack>
