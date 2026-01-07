@@ -66,7 +66,6 @@ const App = () => {
       if (!response) throw new Error('no todos');
 
       const data = JSON.parse(response);
-      console.log('todos', data);
 
       setTodos(data);
     } catch (error) {
@@ -142,27 +141,29 @@ const App = () => {
       </View>
       <ScrollView contentContainerClassName="gap-3">
         {Object.keys(todos).length !== 0 &&
-          Object.keys(todos).map((key) => (
-            <View
-              key={key}
-              className="flex-row items-center justify-between rounded-lg bg-gray-800 px-4 py-3">
-              <View className="flex-row items-center gap-3">
-                <Checkbox
-                  value={todos[key].isCompleted}
-                  onValueChange={() => onPressCheckBox(key, todos)}
-                />
-                <Text className="font-medium text-white">{todos[key].content}</Text>
+          Object.keys(todos).map((key) =>
+            isWorking === todos[key].isWorking ? (
+              <View
+                key={key}
+                className="flex-row items-center justify-between rounded-lg bg-gray-800 px-4 py-3">
+                <View className="flex-row items-center gap-3">
+                  <Checkbox
+                    value={todos[key].isCompleted}
+                    onValueChange={() => onPressCheckBox(key, todos)}
+                  />
+                  <Text className="font-medium text-white">{todos[key].content}</Text>
+                </View>
+                <View className="flex-row items-center gap-3">
+                  <Link href="/modal">
+                    <FontAwesome name="pencil" size={18} color="gray" />
+                  </Link>
+                  <TouchableOpacity onPress={() => onPressDeleteButton(key)}>
+                    <FontAwesome name="trash-o" size={18} color="gray" />
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View className="flex-row items-center gap-3">
-                <Link href="/modal">
-                  <FontAwesome name="pencil" size={18} color="gray" />
-                </Link>
-                <TouchableOpacity onPress={() => onPressDeleteButton(key)}>
-                  <FontAwesome name="trash-o" size={18} color="gray" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))}
+            ) : null
+          )}
       </ScrollView>
     </View>
   );
