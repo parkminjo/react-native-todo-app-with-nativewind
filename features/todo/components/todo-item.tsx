@@ -1,4 +1,4 @@
-import { Todo } from '@/types';
+import type { Todo } from '@/types';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Checkbox } from 'expo-checkbox';
 import { Link } from 'expo-router';

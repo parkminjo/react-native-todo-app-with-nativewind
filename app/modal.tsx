@@ -49,7 +49,7 @@ const Modal = () => {
     <View className="flex-1 bg-black p-5">
       <View className="gap-2">
         <TextInput
-          placeholder="Edit your list"
+          placeholder="Edit your todo"
           className="rounded-lg border border-gray-500 bg-white px-4 py-3"
           value={inputValue}
           onChangeText={onChangeInputValue}

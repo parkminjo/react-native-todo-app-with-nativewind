@@ -22,7 +22,7 @@ export const TodoInput = ({ value, onChangeText, onSubmit }: TodoInputProps) => 
         value={value}
         onChangeText={onChangeText}
         onSubmitEditing={handleSubmitEditing}
-        placeholder="할 일을 입력하세요"
+        placeholder="Enter your todo"
         placeholderTextColor="#9CA3AF"
       />
       <TouchableOpacity

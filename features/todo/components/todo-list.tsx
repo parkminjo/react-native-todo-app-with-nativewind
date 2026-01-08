@@ -1,6 +1,6 @@
-import { Todos } from '@/types';
+import { TodoItem } from '@/features/todo/components/todo-item';
+import type { Todos } from '@/types';
 import { ScrollView } from 'react-native';
-import { TodoItem } from './TodoItem';
 
 interface TodoListProps {
   todos: Todos;

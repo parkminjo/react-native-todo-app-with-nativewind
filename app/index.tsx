@@ -1,7 +1,7 @@
-import { TabSwitcher } from '@/components/features/TabSwitcher';
-import { TodoInput } from '@/components/features/TodoInput';
-import { TodoList } from '@/components/features/TodoList';
-import { useTodos } from '@/hooks/useTodos';
+import { TabSwitcher } from '@/features/todo/components/tab-switcher';
+import { TodoInput } from '@/features/todo/components/todo-input';
+import { TodoList } from '@/features/todo/components/todo-list';
+import { useTodos } from '@/features/todo/hooks/use-todos';
 import { View } from 'react-native';
 import './global.css';
 

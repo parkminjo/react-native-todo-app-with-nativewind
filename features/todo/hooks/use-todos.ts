@@ -1,6 +1,6 @@
 import { STORAGES } from '@/constants/storage';
 import { TABS } from '@/constants/tab';
-import { Todos } from '@/types';
+import type { Todos } from '@/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 import { useEffect, useState } from 'react';
