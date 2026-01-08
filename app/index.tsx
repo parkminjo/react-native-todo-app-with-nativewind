@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Checkbox } from 'expo-checkbox';
 import { Link, useFocusEffect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import './global.css';
 
 const App = () => {
@@ -118,7 +118,6 @@ const App = () => {
 
   return (
     <View className="flex-1 gap-4 bg-black px-5 py-20">
-      <StatusBar />
       <View className="flex-row items-center justify-between">
         <TouchableOpacity onPress={() => onPressTab(true)}>
           <Text className={`text-3xl font-semibold ${isWorking ? 'text-white' : 'text-gray-500'}`}>
