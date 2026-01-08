@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import { Try } from 'expo-router/build/views/Try';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 const RootLayout = () => {
   return (
@@ -37,6 +38,7 @@ const RootLayout = () => {
             }}
           />
         </Stack>
+        <Toast />
       </Try>
     </SafeAreaProvider>
   );

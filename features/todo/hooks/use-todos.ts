@@ -4,6 +4,7 @@ import type { Todos } from '@/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 import { useEffect, useState } from 'react';
+import Toast from 'react-native-toast-message';
 
 export const useTodos = () => {
   const [inputValue, setInputValue] = useState('');
@@ -43,7 +44,15 @@ export const useTodos = () => {
   };
 
   const addTodo = (text: string, isWorking: boolean) => {
-    if (text.trim() === '') return;
+    if (text.trim() === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Todo cannot be empty',
+      });
+
+      return;
+    }
 
     setTodos((prevTodos) => {
       const newTodo = {
